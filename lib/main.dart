@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'models/message_model.dart';
 import 'services/ai_service.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'presentation/screens/main_container.dart'; // ✅ ADDED: MainContainer import
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,11 +54,12 @@ class CaminoSanctusApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const HomeScreen(),
+      home: const MainContainer(), // ✅ CHANGED: Now uses MainContainer with bottom nav
     );
   }
 }
 
+// ✅ OPTIONAL: Keep HomeScreen for testing (can be removed later)
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -86,11 +88,11 @@ class HomeScreen extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(22),
                       decoration: BoxDecoration(
-                        color: Colors.brown.withValues(alpha: 0.1), // FIXED
+                        color: Colors.brown.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.brown.withValues(alpha: 0.15), // FIXED
+                            color: Colors.brown.withValues(alpha: 0.15),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           ),
@@ -112,7 +114,7 @@ class HomeScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.06), // FIXED
+                            color: Colors.black.withValues(alpha: 0.06),
                             blurRadius: 18,
                             offset: const Offset(0, 6),
                           ),
@@ -152,10 +154,11 @@ class HomeScreen extends StatelessWidget {
                       height: 68,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(
+                          // Navigate to MainContainer instead of ChatScreen
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const ChatScreen(),
+                              builder: (context) => const MainContainer(),
                             ),
                           );
                         },
@@ -165,7 +168,7 @@ class HomeScreen extends StatelessWidget {
                             Icon(Icons.auto_awesome, size: 30),
                             SizedBox(width: 14),
                             Text(
-                              'Conversar con Hermana Esperanza AI',
+                              'Entrar a la App',
                               style: TextStyle(
                                 fontSize: 19,
                                 fontWeight: FontWeight.w700,
@@ -247,6 +250,7 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+// ✅ MOVED: Your ChatScreen stays the same (now accessible via MainContainer)
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
 
@@ -347,18 +351,17 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     }
     
     try {
-      // FIXED: Updated speech-to-text API
       await _speechToText.listen(
         onResult: _onSpeechResult,
         listenFor: const Duration(seconds: 30),
         pauseFor: const Duration(seconds: 3),
         localeId: 'es_ES',
         listenOptions: SpeechListenOptions(
-          partialResults: true,
-          cancelOnError: true,
-        ),
+        partialResults: true,
+        cancelOnError: true,
+       ),
       );
-      
+
       setState(() {
         _isListening = true;
         _errorMessage = '';
@@ -507,7 +510,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.08), // FIXED
+                    color: Colors.black.withValues(alpha: 0.08),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),
@@ -639,7 +642,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                         borderRadius: BorderRadius.circular(22),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.1), // FIXED
+                            color: Colors.black.withValues(alpha: 0.1),
                             blurRadius: 10,
                             offset: const Offset(0, 3),
                           ),
@@ -651,7 +654,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                             child: Text(
                               'Hermana Esperanza está consultando la IA...',
                               style: TextStyle(
-                                color: const Color(0xFF8D6E63).withValues(alpha: 0.85), // FIXED
+                                color: const Color(0xFF8D6E63).withValues(alpha: 0.85),
                                 fontSize: 15,
                                 fontStyle: FontStyle.italic,
                                 fontWeight: FontWeight.w500,
@@ -693,7 +696,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.red.withValues(alpha: 0.4), // FIXED
+                                color: Colors.red.withValues(alpha: 0.4),
                                 blurRadius: 10,
                                 spreadRadius: 2,
                               ),
@@ -711,7 +714,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                       decoration: BoxDecoration(
                         color: Colors.red[50],
                         borderRadius: BorderRadius.circular(22),
-                        border: Border.all(color: Colors.red.withValues(alpha: 0.4), width: 1.5), // FIXED
+                        border: Border.all(color: Colors.red.withValues(alpha: 0.4), width: 1.5),
                       ),
                       child: Row(
                         children: [
@@ -796,7 +799,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1), // FIXED
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
@@ -828,7 +831,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06), // FIXED
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 25,
             offset: const Offset(0, -6),
           ),
@@ -842,7 +845,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 decoration: BoxDecoration(
                   color: const Color(0xFFF8F6F0),
                   borderRadius: BorderRadius.circular(28),
-                  border: Border.all(color: const Color(0xFF8D6E63).withValues(alpha: 0.24), width: 1.8), // FIXED
+                  border: Border.all(color: const Color(0xFF8D6E63).withValues(alpha: 0.24), width: 1.8),
                 ),
                 child: TextField(
                   controller: _controller,
@@ -860,7 +863,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                   decoration: InputDecoration(
                     hintText: 'Pregúntale a Hermana Esperanza o usa el micrófono...',
                     hintStyle: TextStyle(
-                      color: const Color(0xFF8D6E63).withValues(alpha: 0.6), // FIXED
+                      color: const Color(0xFF8D6E63).withValues(alpha: 0.6),
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
                     ),
@@ -880,10 +883,10 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                 color: _isListening 
-                                    ? Colors.red.withValues(alpha: 0.5) // FIXED
+                                    ? Colors.red.withValues(alpha: 0.5)
                                     : _speechEnabled 
-                                        ? const Color(0xFF8D6E63).withValues(alpha: 0.5) // FIXED
-                                        : Colors.grey.withValues(alpha: 0.5), // FIXED
+                                        ? const Color(0xFF8D6E63).withValues(alpha: 0.5)
+                                        : Colors.grey.withValues(alpha: 0.5),
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
@@ -902,7 +905,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                             padding: const EdgeInsets.all(6),
                             child: Icon(
                               Icons.psychology,
-                              color: const Color(0xFF8D6E63).withValues(alpha: 0.55), // FIXED
+                              color: const Color(0xFF8D6E63).withValues(alpha: 0.55),
                               size: 20,
                             ),
                           ),
@@ -929,7 +932,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               decoration: BoxDecoration(
                 gradient: _isLoading 
                     ? LinearGradient(
-                        colors: [Colors.grey.shade400, Colors.grey.shade600], // FIXED
+                        colors: [Colors.grey.shade400, Colors.grey.shade600],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       )
@@ -941,7 +944,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 shape: BoxShape.circle,
                 boxShadow: _isLoading ? [] : [
                   BoxShadow(
-                    color: const Color(0xFF8D6E63).withValues(alpha: 0.5), // FIXED
+                    color: const Color(0xFF8D6E63).withValues(alpha: 0.5),
                     blurRadius: 15,
                     offset: const Offset(0, 5),
                   ),
